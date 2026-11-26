@@ -1,0 +1,44 @@
+🤖 AI Email Assistant
+
+An AI-powered Email Assistant built using n8n, OpenAI (GPT) and Gmail.
+
+🚀 Project Overview
+
+This project uses AI to generate professional, polite and helpful replies to customer emails and automatically saves them as Gmail drafts.
+
+✨ Features
+
+- Takes customer email details as input.
+- Generates professional replies using OpenAI.
+- Creates email drafts in Gmail automatically.
+- Allows human review before sending.
+
+🛠️ Technologies Used
+
+- n8n – Workflow Automation
+- OpenAI GPT – AI Text Generation
+- Gmail – Email Draft Creation
+
+⚙️ Workflow
+
+1. Manual Trigger
+2. Edit Fields – Customer email input
+3. Basic LLM Chain – AI reply generation
+4. Gmail – Create Draft
+
+📌 How It Works
+
+The workflow receives customer email information, processes it using an AI language model, generates a suitable reply and saves the response as a Gmail draft.
+
+🎯 Learning Outcomes
+
+- Understanding AI automation
+- Working with LLMs
+- Building workflows in n8n
+- Integrating OpenAI with Gmail
+
+👨‍💻 Author
+
+Dhruv Yadav
+
+Built as my first AI automation project.
