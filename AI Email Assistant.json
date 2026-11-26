@@ -1,0 +1,175 @@
+{
+  "name": "AI Email Assistant",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "cbf220a3-139c-4246-a399-e8ba0885d3e1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d1c82d19-8c02-4ffd-a0c5-078af15ce693",
+              "name": "sender",
+              "value": "customer@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "3b51e922-e407-4d40-9fff-70b4c4dba6af",
+              "name": "subject",
+              "value": "Order Delivery Delay",
+              "type": "string"
+            },
+            {
+              "id": "e0383a0f-e8a3-4227-8a9a-9a49c1f6b901",
+              "name": "email_body",
+              "value": "Hello,  I placed an order last week, but unfortunately I had to cancel it due to personal reasons. I have not received my refund yet. Could you please check the refund status and let me know when I can expect the money back?  Thank you for your support.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "85a54ad8-cd9b-4185-88f8-82dd99f68355",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Email Assistant.\n\nRead the following customer email:\n\nSender: {{ $json.sender }}\nSubject: {{ $json.subject }}\nEmail: {{ $json.email_body }}\n\nGenerate a professional, polite and helpful reply to the customer.\nKeep the reply clear and concise.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        448,
+        0
+      ],
+      "id": "5b1d2815-0233-4723-bb8d-ced8648b9411",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        208
+      ],
+      "id": "6933ae9e-4f50-4a9b-a9f0-92cc9785a01e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Re: {{ $('Edit Fields').item.json.subject }}",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        0
+      ],
+      "id": "e4d35413-3f70-400f-bf83-ca065e4747fb",
+      "name": "Create a draft",
+      "webhookId": "d5d79349-6ac4-4d7c-a4f7-0773b6c7b8d7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IlofFxdgylxWRU9I",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "335bc9e2-800d-48c6-8c7b-642db54020e0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "91a0df71bfafcc21ba0b3eed3eb3072cdf1a5596f78cb5768df7f60495c42101"
+  },
+  "nodeGroups": [],
+  "id": "uWk7GpAqsww80nMA",
+  "tags": []
+}
